@@ -107,18 +107,42 @@ Incoming traffic appears in the session as `<channel source="claudelinked" kind=
 - The relay speaks plain HTTP. Use it on a trusted LAN, over Tailscale/VPN, or behind an HTTPS reverse proxy (`--relay https://...` works as-is).
 - The channel tells Claude that peer messages come from another session, not from the local user. Claude is told to check with the local user before destructive or outward-facing actions.
 
-## Development
+## Testing
+
+### 1. Automated tests (no Claude sessions needed)
 
 ```cmd
 npm test
 ```
 
-This runs `test/e2e.mjs`: a real relay plus two real channel servers, driven over MCP stdio the way Claude Code drives them. It covers blocking and non-blocking asks, late answers, both directions, offline queueing, acks, bad tokens, and name takeover.
+`test/e2e.mjs` starts a real relay and two real channel servers and drives them over MCP stdio the way Claude Code does. It covers blocking and non-blocking asks, late answers, both directions, offline queueing, acks, bad tokens, and name takeover. It should print `13 passed`.
+
+### 2. One PC: check that a session really wakes up and answers
+
+This is the part worth testing by hand, and you don't need a second PC for it. With the relay running and this PC set up as `PC-A`, start a session with `claude-linked.cmd`, wait for `/mcp` to show `claudelinked` connected, then from another terminal play the part of the other PC:
+
+```cmd
+node scripts\ask.mjs --list
+node scripts\ask.mjs --to PC-A "What files are in your working directory?"
+```
+
+`ask.mjs` sends a real question through the relay and prints the answer your Claude session sends back. Your session should start working on it on its own, without you typing anything. It reads the relay address and token from `config\`, and takes `--as <name>` (the name it shows as, default `cli`) and `--wait <seconds>`.
+
+### 3. Both PCs, the real thing
+
+With the relay running and both PCs set up with different peer names, start `claude-linked.cmd` on each. On PC-A, ask something only PC-B can answer:
+
+> Ask PC-B what the last commit message in their repo is.
+
+Then check it both ways by asking PC-B to ask PC-A something. If nothing arrives, run `/mcp` on each side to confirm `claudelinked` is connected, and ask Claude to run `list_peers` — it shows who the relay sees and how many messages are queued.
+
+## Files
 
 ```
 relay/server.mjs          relay (no dependencies): SSE stream, /send, /ack, /peers, disk-backed queue
 channel/claudelinked.mjs  channel MCP server loaded by each Claude Code session
 scripts/setup.mjs         writes config/ for this PC and checks the relay
+scripts/ask.mjs           ask a connected session a question from the command line
 claude-linked.cmd         starts claude with the channel enabled
 start-relay.cmd           starts the relay
 ```
