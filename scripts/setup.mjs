@@ -4,6 +4,7 @@
 //   node scripts/setup.mjs --peer PC-A --relay http://192.168.1.20:7878 --token <token from relay>
 
 import fs from 'node:fs'
+import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -65,6 +66,19 @@ try {
     console.error('Check the relay is running, the address/port is right, and the firewall on the relay PC allows the port.')
   }
   process.exitCode = 2
+}
+
+// Install the skill so Claude knows how to use ClaudeLinked in every project on this PC.
+if (!process.argv.includes('--no-skill')) {
+  const source = path.join(root, 'skills', 'claudelinked', 'SKILL.md')
+  const target = path.join(os.homedir(), '.claude', 'skills', 'claudelinked', 'SKILL.md')
+  try {
+    fs.mkdirSync(path.dirname(target), { recursive: true })
+    fs.copyFileSync(source, target)
+    console.log(`Installed the claudelinked skill to ${target}`)
+  } catch (err) {
+    console.error(`Warning: could not install the skill to ${target}: ${err.message}`)
+  }
 }
 
 console.log(`\nStart Claude Code with ClaudeLinked from any project folder:\n  "${path.join(root, 'claude-linked.cmd')}"`)

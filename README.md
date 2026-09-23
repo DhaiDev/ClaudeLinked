@@ -55,7 +55,9 @@ Copy this folder to each PC and run `npm install` there. Then run setup with a *
 node scripts\setup.mjs --peer PC-A --relay http://192.168.1.20:7878 --token <token>
 ```
 
-This writes `config\` (it contains the token, so keep it private) and checks that the relay answers.
+This writes `config\` (it contains the token, so keep it private), checks that the relay answers, and installs the
+`claudelinked` skill to `%USERPROFILE%\.claude\skills\claudelinked\SKILL.md` so Claude knows how to use ClaudeLinked in
+every project on that PC. Pass `--no-skill` to skip the skill.
 
 ### 3. Start Claude Code through the launcher
 
@@ -141,7 +143,8 @@ Then check it both ways by asking PC-B to ask PC-A something. If nothing arrives
 ```
 relay/server.mjs          relay (no dependencies): SSE stream, /send, /ack, /peers, disk-backed queue
 channel/claudelinked.mjs  channel MCP server loaded by each Claude Code session
-scripts/setup.mjs         writes config/ for this PC and checks the relay
+scripts/setup.mjs         writes config/ for this PC, checks the relay, installs the skill
+skills/claudelinked/      SKILL.md: how Claude should ask, answer, and debug ClaudeLinked
 scripts/ask.mjs           ask a connected session a question from the command line
 claude-linked.cmd         starts claude with the channel enabled
 start-relay.cmd           starts the relay
