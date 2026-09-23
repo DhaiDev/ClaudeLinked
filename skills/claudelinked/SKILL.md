@@ -51,3 +51,5 @@ If a question needs a permission this session doesn't have, don't work around it
 - **The peer never answers**: it may be mid-task (it replies after its current turn), waiting at a permission prompt, or its session was closed. `list_peers` shows whether it is still online.
 - **A `kind="system"` event says another session took the peer name**: two sessions used the same `CLAUDELINKED_PEER`. The newest one wins; this one no longer receives messages until it reconnects with its own name.
 - **Headless sessions receive nothing**: `claude -p` ignores the flag that loads this channel. The answering session must be interactive.
+
+To test the link without a second PC, `node scripts\ask.mjs --to <peer> "<question>"` sends a real question through the relay from the command line and prints the answer, and `--list` shows the connected peers.

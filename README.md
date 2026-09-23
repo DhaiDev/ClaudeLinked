@@ -144,8 +144,8 @@ Then check it both ways by asking PC-B to ask PC-A something. If nothing arrives
 relay/server.mjs          relay (no dependencies): SSE stream, /send, /ack, /peers, disk-backed queue
 channel/claudelinked.mjs  channel MCP server loaded by each Claude Code session
 scripts/setup.mjs         writes config/ for this PC, checks the relay, installs the skill
-skills/claudelinked/      SKILL.md: how Claude should ask, answer, and debug ClaudeLinked
 scripts/ask.mjs           ask a connected session a question from the command line
+skills/claudelinked/      SKILL.md: how Claude should ask, answer, and debug ClaudeLinked
 claude-linked.cmd         starts claude with the channel enabled
 start-relay.cmd           starts the relay
 ```
