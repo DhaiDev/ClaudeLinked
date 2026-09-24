@@ -67,6 +67,12 @@ From any project folder:
 C:\Dev\ClaudeLinked\claude-linked.cmd
 ```
 
+On macOS or Linux, use the shell launcher instead:
+
+```bash
+~/dev/ClaudeLinked/claude-linked.sh
+```
+
 Extra arguments are passed straight to `claude`. On startup:
 
 1. Choose **"I am using this for local development"**. Custom channels need this confirmation while channels are a research preview.
@@ -146,6 +152,7 @@ channel/claudelinked.mjs  channel MCP server loaded by each Claude Code session
 scripts/setup.mjs         writes config/ for this PC, checks the relay, installs the skill
 scripts/ask.mjs           ask a connected session a question from the command line
 skills/claudelinked/      SKILL.md: how Claude should ask, answer, and debug ClaudeLinked
-claude-linked.cmd         starts claude with the channel enabled
+claude-linked.cmd         starts claude with the channel enabled (Windows)
+claude-linked.sh          starts claude with the channel enabled (macOS/Linux)
 start-relay.cmd           starts the relay
 ```

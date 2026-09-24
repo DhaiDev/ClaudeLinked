@@ -81,4 +81,5 @@ if (!process.argv.includes('--no-skill')) {
   }
 }
 
-console.log(`\nStart Claude Code with ClaudeLinked from any project folder:\n  "${path.join(root, 'claude-linked.cmd')}"`)
+const launcher = path.join(root, process.platform === 'win32' ? 'claude-linked.cmd' : 'claude-linked.sh')
+console.log(`\nStart Claude Code with ClaudeLinked from any project folder:\n  "${launcher}"`)
